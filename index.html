@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Vlad the Frog ($VROG) — The Pepe of Robinhood Chain 🐸</title>
+<meta name="description" content="Vlad the Frog ($VROG) — Robinhood founder @VladTenev tweeted a frog meme and said the frog is him. The Pepe of Robinhood Chain. All trading fees going to Vlad. 🐸💚🚀" />
+
+<!-- ========================================================= -->
+<!--  PATCH HERE  ·  edit these two values ONCE                 -->
+<!--  Every Uniswap buy link + Dexscreener chart auto-update.  -->
+<!-- ========================================================= -->
+<script>
+  const CONFIG = {
+    // Token contract address (RobinHood Chain)
+    contract: "0xComingSoon",
+    // Liquidity pair address (for Dexscreener chart)
+    pair:     "0xPairAddress",
+    // RobinHood Chain identifiers
+    chainSlug: "robinhood",   // dexscreener chain slug
+    uniChain:  "robinhood"    // uniswap ?chain= param
+  };
+</script>
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Bootstrap Icons (X, Telegram, etc.) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+<!-- Comic + brand fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Baloo+2:wght@500;600;700;800&family=Luckiest+Guy&display=swap" rel="stylesheet" />
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          comic: ['"Bangers"', 'cursive'],
+          punch: ['"Luckiest Guy"', 'cursive'],
+          body:  ['"Baloo 2"', 'sans-serif']
+        },
+        colors: {
+          ink:     '#06140d',
+          panel:   '#0b2418',
+          bgreen:  '#0f5c34',   // bitstamp green
+          neon:    '#22e57a',   // bright candle green
+          neon2:   '#5cff9d',
+          cream:   '#f4efe2'
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  :root { --neon:#22e57a; --ink:#06140d; --cream:#f4efe2; }
+
+  html { scroll-behavior: smooth; }
+  body {
+    background:
+      radial-gradient(1200px 700px at 80% -10%, rgba(34,229,122,.18), transparent 60%),
+      radial-gradient(900px 600px at 0% 100%, rgba(15,92,52,.35), transparent 55%),
+      #06140d;
+    color: var(--cream);
+    font-family: 'Baloo 2', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* fixed image background layer */
+  .bg-layer {
+    position: fixed; inset: 0; z-index: -2;
+    background: url('background.png') center/540px repeat;
+    opacity: .10;
+    filter: saturate(1.2);
+  }
+  .bg-veil {
+    position: fixed; inset: 0; z-index: -1;
+    background: linear-gradient(180deg, rgba(6,20,13,.55), rgba(6,20,13,.88));
+    pointer-events: none;
+  }
+
+  /* halftone comic dots */
+  .halftone {
+    background-image: radial-gradient(rgba(34,229,122,.25) 1.4px, transparent 1.6px);
+    background-size: 14px 14px;
+  }
+
+  /* comic hard-edge panel */
+  .panel {
+    border: 4px solid #06140d;
+    box-shadow: 10px 10px 0 #06140d, 0 0 0 4px rgba(34,229,122,.35) inset;
+    background: rgba(11,36,24,.78);
+    backdrop-filter: blur(3px);
+  }
+  .panel-neon {
+    border: 4px solid #06140d;
+    box-shadow: 10px 10px 0 var(--neon);
+  }
+
+  /* comic title outline */
+  .toon {
+    -webkit-text-stroke: 3px #06140d;
+    text-shadow: 6px 6px 0 rgba(6,20,13,.55);
+    letter-spacing: 2px;
+  }
+  .toon-sm { -webkit-text-stroke: 2px #06140d; text-shadow: 4px 4px 0 rgba(6,20,13,.5); }
+
+  /* 3D PERSPECTIVE THEME */
+  .stage { perspective: 1400px; perspective-origin: 50% 40%; }
+  .tilt-l { transform: rotateY(14deg) rotateX(5deg); transform-style: preserve-3d; transition: transform .5s cubic-bezier(.2,.8,.2,1); }
+  .tilt-r { transform: rotateY(-14deg) rotateX(5deg); transform-style: preserve-3d; transition: transform .5s cubic-bezier(.2,.8,.2,1); }
+  .tilt-l:hover, .tilt-r:hover { transform: rotateY(0) rotateX(0) scale(1.02); }
+
+  .card3d { transform-style: preserve-3d; transition: transform .45s ease; }
+  .card3d:hover { transform: translateY(-8px) rotateX(6deg) rotateY(-6deg); }
+  .pop { transform: translateZ(40px); }
+
+  /* comic burst star */
+  .burst {
+    background: var(--neon);
+    color: #06140d;
+    clip-path: polygon(50% 0%,61% 20%,84% 12%,80% 36%,100% 43%,84% 60%,95% 82%,70% 78%,58% 100%,45% 80%,20% 92%,26% 66%,3% 60%,22% 44%,8% 22%,32% 27%,38% 4%);
+  }
+
+  /* floating coins */
+  @keyframes bob { 0%,100%{ transform: translateY(0) rotate(-6deg); } 50%{ transform: translateY(-22px) rotate(8deg); } }
+  .bob  { animation: bob 5s ease-in-out infinite; }
+  .bob2 { animation: bob 6.5s ease-in-out infinite; }
+  .bob3 { animation: bob 8s ease-in-out infinite; }
+
+  @keyframes marquee { from{ transform: translateX(0);} to{ transform: translateX(-50%);} }
+  .marquee { animation: marquee 22s linear infinite; }
+
+  .btn-neon {
+    background: var(--neon); color:#06140d; border:3px solid #06140d;
+    box-shadow: 5px 5px 0 #06140d; transition: all .12s ease;
+  }
+  .btn-neon:hover { transform: translate(-2px,-2px); box-shadow: 8px 8px 0 #06140d; }
+  .btn-neon:active { transform: translate(3px,3px); box-shadow: 2px 2px 0 #06140d; }
+
+  .btn-ghost {
+    background: transparent; color: var(--cream); border:3px solid var(--neon);
+    box-shadow: 5px 5px 0 rgba(34,229,122,.4); transition: all .12s ease;
+  }
+  .btn-ghost:hover { background: rgba(34,229,122,.12); transform: translate(-2px,-2px); box-shadow:8px 8px 0 rgba(34,229,122,.4); }
+
+  .sock { transition: transform .15s ease; }
+  .sock:hover { transform: translateY(-4px) rotate(-6deg) scale(1.1); }
+
+  /* speech bubble tail */
+  .bubble { position: relative; }
+  .bubble::after {
+    content:''; position:absolute; left:44px; bottom:-22px;
+    border:14px solid transparent; border-top-color:#06140d;
+    border-right: 0;
+  }
+
+  /* section wedge divider */
+  .wedge-top { clip-path: polygon(0 4%, 100% 0, 100% 100%, 0 100%); }
+
+  .reveal { opacity:0; transform: translateY(40px); transition: all .7s cubic-bezier(.2,.8,.2,1); }
+  .reveal.in { opacity:1; transform: none; }
+</style>
+</head>
+
+<body class="font-body selection:bg-neon selection:text-ink">
+
+<div class="bg-layer"></div>
+<div class="bg-veil"></div>
+
+<!-- ============ TICKER ============ -->
+<div class="w-full bg-neon text-ink border-b-4 border-ink overflow-hidden whitespace-nowrap">
+  <div class="marquee inline-flex gap-8 py-1.5 font-comic text-lg tracking-wider">
+    <span>🐸 VLAD THE FROG</span><span>💚 ALL FEES TO VLAD</span><span>🐸 $VROG</span>
+    <span>🚀 THE PEPE OF ROBINHOOD</span><span>💚 @VLADTENEV SAID IT</span><span>📈 ROBINHOOD CHAIN</span>
+    <span>🐸 VLAD THE FROG</span><span>💚 ALL FEES TO VLAD</span><span>🐸 $VROG</span>
+    <span>🚀 THE PEPE OF ROBINHOOD</span><span>💚 @VLADTENEV SAID IT</span><span>📈 ROBINHOOD CHAIN</span>
+  </div>
+</div>
+
+<!-- ============ NAV ============ -->
+<header class="sticky top-0 z-50 backdrop-blur-md bg-ink/70 border-b-4 border-ink">
+  <nav class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+    <a href="#hero" class="flex items-center gap-3 group">
+      <img src="logo.png" alt="Vlad the Frog logo" class="w-12 h-12 rounded-full border-4 border-ink shadow-[4px_4px_0_#22e57a] group-hover:rotate-12 transition" />
+      <span class="font-comic text-2xl md:text-3xl text-cream tracking-wide toon-sm">Vlad the <span class="text-neon">Frog</span></span>
+    </a>
+    <div class="hidden md:flex items-center gap-6 font-comic text-lg tracking-wide">
+      <a href="#about" class="hover:text-neon transition">About</a>
+      <a href="#howtobuy" class="hover:text-neon transition">How To Buy</a>
+      <a href="#chart" class="hover:text-neon transition">Chart</a>
+      <a href="#join" class="hover:text-neon transition">Join</a>
+    </div>
+    <a data-buy href="#" target="_blank" rel="noopener" class="btn-neon font-comic tracking-wide px-4 py-2 text-lg flex items-center gap-2">
+      <i class="bi bi-bag-check-fill"></i> BUY $VROG
+    </a>
+  </nav>
+</header>
+
+<!-- ============ HERO ============ -->
+<section id="hero" class="relative max-w-7xl mx-auto px-4 pt-14 pb-24 stage">
+  <!-- floating coins -->
+  <img src="main.png" alt="" class="hidden xl:block absolute -left-14 top-[30rem] w-24 rounded-full border-4 border-ink shadow-[6px_6px_0_#06140d] bob opacity-90 z-10" />
+  <img src="logo.png" alt="" class="hidden xl:block absolute -right-6 top-[24rem] w-20 rounded-full border-4 border-ink shadow-[6px_6px_0_#06140d] bob2 opacity-90 z-30" />
+
+  <div class="grid lg:grid-cols-2 gap-10 items-center">
+    <!-- copy -->
+    <div class="reveal">
+      <div class="inline-flex items-center gap-2 bg-panel border-2 border-neon rounded-full px-4 py-1 mb-5 font-comic tracking-wide text-neon">
+        <span class="w-2.5 h-2.5 rounded-full bg-neon animate-pulse"></span> LIVE ON ROBINHOOD CHAIN
+      </div>
+      <h1 class="font-comic leading-[0.85] text-cream">
+        <span class="block text-6xl sm:text-7xl md:text-8xl toon">VLAD THE</span>
+        <span class="block text-6xl sm:text-7xl md:text-8xl text-neon toon">FROG</span>
+      </h1>
+      <p class="mt-5 font-comic text-2xl md:text-3xl text-neon2 toon-sm">🐸 The Pepe of Robinhood Chain. 💚</p>
+      <p class="mt-4 text-lg text-cream/80 max-w-lg">
+        Robinhood founder @VladTenev tweeted a frog meme and said the frog is him.
+        He literally gave us the Pepe of Robinhood Chain. All trading fees going to Vlad. 🐸🚀
+      </p>
+
+      <!-- contract box -->
+      <div class="panel rounded-xl p-3 mt-6 max-w-lg flex items-center gap-3">
+        <span class="font-comic text-neon tracking-wide shrink-0">CA:</span>
+        <code data-ca class="text-cream/90 text-sm truncate flex-1">0x0000…0000</code>
+        <button data-copy class="btn-neon font-comic px-3 py-1 text-sm shrink-0">
+          <i class="bi bi-clipboard"></i> COPY
+        </button>
+      </div>
+
+      <div class="flex flex-wrap gap-4 mt-6">
+        <a data-buy href="#" target="_blank" rel="noopener" class="btn-neon font-comic text-xl tracking-wide px-6 py-3 flex items-center gap-2">
+          <i class="bi bi-lightning-charge-fill"></i> BUY ON UNISWAP
+        </a>
+        <a href="#chart" class="btn-ghost font-comic text-xl tracking-wide px-6 py-3 flex items-center gap-2">
+          <i class="bi bi-graph-up-arrow"></i> VIEW CHART
+        </a>
+      </div>
+
+      <!-- stat pills -->
+      <div class="flex flex-wrap gap-3 mt-8 font-comic tracking-wide">
+        <div class="panel rounded-lg px-4 py-2"><span class="text-neon">NAME</span> · Vlad the Frog</div>
+        <div class="panel rounded-lg px-4 py-2"><span class="text-neon">SYMBOL</span> · $VROG</div>
+        <div class="panel rounded-lg px-4 py-2"><span class="text-neon">CHAIN</span> · RobinHood</div>
+      </div>
+    </div>
+
+    <!-- hero image, perspective tilt -->
+    <div class="relative reveal">
+      <div class="burst absolute -top-6 -right-2 z-20 w-28 h-28 grid place-items-center rotate-12 font-comic text-2xl text-center leading-none">TO THE<br>MOON</div>
+      <div class="tilt-r panel-neon rounded-3xl overflow-hidden halftone">
+        <img src="hero.png" alt="Vlad the Frog" class="w-full h-full object-cover" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section id="about" class="relative bg-panel/60 border-y-4 border-ink wedge-top py-24">
+  <div class="max-w-7xl mx-auto px-4 stage">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <!-- image -->
+      <div class="relative reveal order-2 lg:order-1">
+        <div class="burst absolute -bottom-6 -left-4 z-20 w-24 h-24 grid place-items-center -rotate-12 font-comic text-xl text-center leading-none">HODL!</div>
+        <div class="tilt-l panel-neon rounded-3xl overflow-hidden">
+          <img src="about.png" alt="Vlad the Frog holding the coin" class="w-full object-cover" />
+        </div>
+      </div>
+      <!-- copy -->
+      <div class="reveal order-1 lg:order-2">
+        <div class="inline-block burst px-6 py-2 mb-5 font-comic text-2xl tracking-wide -rotate-2">ABOUT $VROG</div>
+        <h2 class="font-comic text-5xl md:text-6xl text-cream toon-sm mb-2">VLAD <span class="text-neon">SAID IT</span></h2>
+
+        <div class="bubble panel rounded-2xl p-6 mt-6">
+          <p class="text-lg text-cream/90 leading-relaxed">
+            Founder of Robinhood <b class="text-neon">@VladTenev</b> tweeted a frog meme and said the frog is him.
+            He literally gave us the Pepe of Robinhood Chain — <b class="text-neon">Vlad the Frog</b>.
+          </p>
+          <p class="text-lg text-cream/90 leading-relaxed mt-4">
+            All trading fees going to Vlad. The community meme that turned a founder tweet into legend.
+            Hop in, ride the frog, and celebrate the Pepe of Robinhood Chain. 🐸💚🚀
+          </p>
+        </div>
+
+        <!-- perspective stat cards -->
+        <div class="grid grid-cols-3 gap-4 mt-8 stage">
+          <div class="card3d panel rounded-xl p-4 text-center">
+            <div class="pop font-comic text-4xl text-neon">🐸</div>
+            <div class="font-comic tracking-wide mt-1">Vlad's Frog</div>
+          </div>
+          <div class="card3d panel rounded-xl p-4 text-center">
+            <div class="pop font-comic text-4xl text-neon">💚</div>
+            <div class="font-comic tracking-wide mt-1">Fees to Vlad</div>
+          </div>
+          <div class="card3d panel rounded-xl p-4 text-center">
+            <div class="pop font-comic text-4xl text-neon">🚀</div>
+            <div class="font-comic tracking-wide mt-1">Robinhood</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW TO BUY ============ -->
+<section id="howtobuy" class="relative py-24">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="text-center mb-14 reveal">
+      <div class="inline-block burst px-6 py-2 mb-4 font-comic text-2xl tracking-wide rotate-2">4 EASY STEPS</div>
+      <h2 class="font-comic text-5xl md:text-7xl text-cream toon">HOW TO <span class="text-neon">BUY</span></h2>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-12 items-center stage">
+      <!-- image -->
+      <div class="relative reveal">
+        <div class="burst absolute -top-6 -right-4 z-20 w-24 h-24 grid place-items-center rotate-12 font-comic text-xl text-center leading-none">LFG!</div>
+        <div class="tilt-r panel-neon rounded-3xl overflow-hidden">
+          <img src="howtobuy.png" alt="Vlad the Frog to the moon" class="w-full object-cover" />
+        </div>
+      </div>
+
+      <!-- steps -->
+      <div class="space-y-5 stage">
+        <div class="card3d panel rounded-2xl p-5 flex gap-4 items-start reveal">
+          <div class="pop burst w-14 h-14 shrink-0 grid place-items-center font-comic text-2xl">1</div>
+          <div>
+            <h3 class="font-comic text-2xl text-neon tracking-wide">GET A WALLET</h3>
+            <p class="text-cream/80">Install MetaMask or any Web3 wallet and add the <b>RobinHood Chain</b> network.</p>
+          </div>
+        </div>
+        <div class="card3d panel rounded-2xl p-5 flex gap-4 items-start reveal">
+          <div class="pop burst w-14 h-14 shrink-0 grid place-items-center font-comic text-2xl">2</div>
+          <div>
+            <h3 class="font-comic text-2xl text-neon tracking-wide">FUND IT</h3>
+            <p class="text-cream/80">Bridge or deposit the native gas token of RobinHood Chain into your wallet.</p>
+          </div>
+        </div>
+        <div class="card3d panel rounded-2xl p-5 flex gap-4 items-start reveal">
+          <div class="pop burst w-14 h-14 shrink-0 grid place-items-center font-comic text-2xl">3</div>
+          <div>
+            <h3 class="font-comic text-2xl text-neon tracking-wide">SWAP ON UNISWAP</h3>
+            <p class="text-cream/80">Open Uniswap, paste the <b>$VROG</b> contract, and swap. <a data-buy href="#" target="_blank" rel="noopener" class="text-neon underline">Open Uniswap →</a></p>
+          </div>
+        </div>
+        <div class="card3d panel rounded-2xl p-5 flex gap-4 items-start reveal">
+          <div class="pop burst w-14 h-14 shrink-0 grid place-items-center font-comic text-2xl">4</div>
+          <div>
+            <h3 class="font-comic text-2xl text-neon tracking-wide">HOP WITH VLAD</h3>
+            <p class="text-cream/80">Welcome to the frog gang. All fees to Vlad. Ride the Pepe of Robinhood. 🐸🚀</p>
+          </div>
+        </div>
+
+        <div class="panel rounded-2xl p-4 flex items-center gap-3">
+          <span class="font-comic text-neon tracking-wide shrink-0">CA:</span>
+          <code data-ca class="text-cream/90 text-sm truncate flex-1">0x0000…0000</code>
+          <button data-copy class="btn-neon font-comic px-3 py-1 text-sm shrink-0"><i class="bi bi-clipboard"></i> COPY</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHART ============ -->
+<section id="chart" class="relative bg-panel/60 border-y-4 border-ink wedge-top py-24">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="text-center mb-10 reveal">
+      <div class="inline-block burst px-6 py-2 mb-4 font-comic text-2xl tracking-wide -rotate-2">LIVE PRICE</div>
+      <h2 class="font-comic text-5xl md:text-7xl text-cream toon">THE <span class="text-neon">CHART</span> 📈</h2>
+    </div>
+    <div class="panel-neon rounded-3xl overflow-hidden reveal">
+      <div class="relative w-full" style="height:640px">
+        <iframe data-chart title="Dexscreener chart" class="absolute inset-0 w-full h-full border-0"></iframe>
+      </div>
+    </div>
+    <div class="text-center mt-6">
+      <a data-dex href="#" target="_blank" rel="noopener" class="btn-ghost font-comic text-lg tracking-wide px-6 py-3 inline-flex items-center gap-2">
+        <i class="bi bi-box-arrow-up-right"></i> OPEN ON DEXSCREENER
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ JOIN US (banner png ONLY here) ============ -->
+<section id="join" class="relative py-24">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="text-center mb-10 reveal">
+      <div class="inline-block burst px-6 py-2 mb-4 font-comic text-2xl tracking-wide rotate-2">FROG GANG</div>
+      <h2 class="font-comic text-5xl md:text-7xl text-cream toon">JOIN THE <span class="text-neon">HOP</span> 🐸</h2>
+    </div>
+
+    <!-- banner -->
+    <div class="panel-neon rounded-3xl overflow-hidden reveal">
+      <img src="banner.png" alt="Vlad the Frog — The Pepe of Robinhood Chain" class="w-full object-cover" />
+    </div>
+
+    <p class="text-center text-xl text-cream/85 mt-8 max-w-2xl mx-auto reveal">
+      Vlad said the frog is him. All trading fees going to Vlad. Hop in with the Pepe of Robinhood Chain. 🐸💚
+    </p>
+
+    <!-- socials -->
+    <div class="flex flex-wrap justify-center gap-5 mt-8">
+      <a href="https://x.com/vladthefrog" target="_blank" rel="noopener"
+         class="sock btn-neon font-comic text-xl tracking-wide px-6 py-3 flex items-center gap-3">
+        <i class="bi bi-twitter-x text-2xl"></i> X / TWITTER
+      </a>
+      <a data-buy href="#" target="_blank" rel="noopener"
+         class="sock btn-neon font-comic text-xl tracking-wide px-6 py-3 flex items-center gap-3">
+        <!-- uniswap unicorn -->
+        <svg viewBox="0 0 24 24" class="w-6 h-6" fill="currentColor" aria-hidden="true"><path d="M9.3 3.1c.9.5 1.3 1.5 1.2 2.9 0 .3 0 .3.4.5 1.9.7 3.4 2.6 4 5 .2.7.2 2.2 0 2.9-.5 1.9-1.9 3.4-3.7 4-1 .3-2.7.3-3.7 0-2.7-.9-4.4-3.6-4-6.4.2-1.3 1-2.7 2-3.5.3-.2.3-.3.2-.6-.3-.8-1-1.2-1.9-1.1-.6 0-1 .3-1.4.8-.5.7-.6 1.6-.2 3 .5 1.7.4 2.9-.3 4-.6.9-1.4 1.4-2.5 1.5-1.6.2-3-.7-3.6-2.2-.2-.6-.2-1.7 0-2.2.3-.6.8-.9 1.4-.9.9 0 1.5.6 1.5 1.5 0 .5-.1.7-.5 1.1-.5.5-.5.7 0 .9.7.3 1.5-.2 1.7-1 .1-.5 0-1-.4-2.1C-.1 8.4.6 6 2.6 4.7c.9-.6 1.5-.7 2.9-.7 1.2 0 1.3 0 1-.4-.2-.2-.5-.4-.8-.5-.6-.2-.6-.2-.2-.5.6-.4 1.9-.3 2.8.1z"/></svg>
+        UNISWAP
+      </a>
+      <a data-dex href="#" target="_blank" rel="noopener"
+         class="sock btn-ghost font-comic text-xl tracking-wide px-6 py-3 flex items-center gap-3">
+        <i class="bi bi-bar-chart-line-fill text-2xl"></i> DEXSCREENER
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="border-t-4 border-ink bg-ink/80 py-10">
+  <div class="max-w-7xl mx-auto px-4 flex flex-col items-center gap-4 text-center">
+    <img src="logo.png" alt="Vlad the Frog" class="w-16 h-16 rounded-full border-4 border-ink shadow-[4px_4px_0_#22e57a]" />
+    <p class="font-comic text-2xl tracking-wide">Vlad the <span class="text-neon">Frog</span> · $VROG</p>
+    <p class="text-neon2 font-comic tracking-wide">🐸 The Pepe of Robinhood Chain. All fees to Vlad. 💚</p>
+    <div class="flex gap-5 text-3xl">
+      <a href="https://x.com/vladthefrog" target="_blank" rel="noopener" class="sock hover:text-neon"><i class="bi bi-twitter-x"></i></a>
+      <a data-dex href="#" target="_blank" rel="noopener" class="sock hover:text-neon"><i class="bi bi-bar-chart-line-fill"></i></a>
+    </div>
+    <p class="text-cream/50 text-sm max-w-xl mt-2">
+      $VROG is a community meme coin with no intrinsic value or expectation of financial return. For entertainment purposes only. DYOR.
+    </p>
+    <p class="text-cream/40 text-xs">© 2026 Vlad the Frog · The Pepe of Robinhood Chain.</p>
+  </div>
+</footer>
+
+<script>
+  // ---- Wire everything from CONFIG (patch once, updates all) ----
+  (function () {
+    const { contract, pair, chainSlug, uniChain } = CONFIG;
+
+    const uniLink = `https://app.uniswap.org/swap?outputCurrency=${contract}&chain=${uniChain}`;
+    const dexPage = `https://dexscreener.com/${chainSlug}/${pair}`;
+    const dexEmbed = `${dexPage}?embed=1&theme=dark&trades=0&info=0`;
+    const shortCA = contract.length > 12 ? `${contract.slice(0,6)}…${contract.slice(-4)}` : contract;
+
+    document.querySelectorAll('[data-buy]').forEach(a => a.href = uniLink);
+    document.querySelectorAll('[data-dex]').forEach(a => a.href = dexPage);
+    document.querySelectorAll('[data-ca]').forEach(el => el.textContent = shortCA);
+    document.querySelectorAll('[data-chart]').forEach(f => f.src = dexEmbed);
+
+    // copy contract
+    document.querySelectorAll('[data-copy]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(contract);
+          const html = btn.innerHTML;
+          btn.innerHTML = '<i class="bi bi-check-lg"></i> COPIED';
+          setTimeout(() => btn.innerHTML = html, 1400);
+        } catch (e) {}
+      });
+    });
+  })();
+
+  // ---- Scroll reveal ----
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
